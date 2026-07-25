@@ -1,11 +1,14 @@
 import { createClient } from '@supabase/supabase-js'
 import type { Database } from '@/types/database'
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+const supabaseUrl = (import.meta.env.VITE_SUPABASE_URL as string) || ''
+const supabaseAnonKey = (import.meta.env.VITE_SUPABASE_ANON_KEY as string) || ''
 
 if (!supabaseUrl || !supabaseAnonKey) {
-  console.warn('Supabase env vars missing – running in demo mode')
+  console.warn(
+    '[supabase] VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY is missing. ' +
+      'Set them in Replit Secrets, then restart the app.'
+  )
 }
 
 export const supabase = createClient<Database>(
@@ -15,15 +18,15 @@ export const supabase = createClient<Database>(
     auth: {
       persistSession: true,
       autoRefreshToken: true,
-      detectSessionInUrl: true
-    }
+      detectSessionInUrl: true,
+    },
   }
 )
 
 /** Convert Ethiopian phone to synthetic email for Supabase Auth */
 export function phoneToSyntheticEmail(phone: string): string {
   const normalized = phone.replace(/\s+/g, '').replace(/^\+/, '')
-  return `${normalized}@howlow.internal`
+  return `${normalized}@howlow.app`
 }
 
 /** Normalize user input to E.164 +251... */
