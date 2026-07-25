@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react'
 import { Outlet, NavLink } from 'react-router-dom'
 import { LayoutDashboard, Package, Gavel, Users, Wallet, Settings } from 'lucide-react'
+import { supabase } from '@/lib/supabase'
 
 const links = [
   { to: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
@@ -11,6 +13,29 @@ const links = [
 ]
 
 export default function AdminLayout() {
+  const [pendingDeposits, setPendingDeposits] = useState(0)
+
+  useEffect(() => {
+    const loadCount = async () => {
+      const { count } = await supabase
+        .from('deposit_requests')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'pending')
+      setPendingDeposits(count || 0)
+    }
+    loadCount()
+
+    // Keep the badge live as new payment requests come in
+    const channel = supabase
+      .channel('admin-deposit-requests')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'deposit_requests' }, loadCount)
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [])
+
   return (
     <div className="min-h-screen flex">
       <aside className="w-56 bg-gray-900 text-white flex-shrink-0 hidden md:flex flex-col">
@@ -28,7 +53,10 @@ export default function AdminLayout() {
               }
             >
               <Icon size={18} />
-              {label}
+              <span className="flex-1">{label}</span>
+              {label === 'Wallet' && pendingDeposits > 0 && (
+                <span className="text-xs bg-red-600 text-white rounded-full px-2 py-0.5">{pendingDeposits}</span>
+              )}
             </NavLink>
           ))}
         </nav>
