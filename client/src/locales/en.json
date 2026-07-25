@@ -42,7 +42,12 @@
   "confirm": "Confirm",
   "loading": "Loading...",
   "error_generic": "Something went wrong. Please try again.",
+  "error_connection": "Cannot reach the server. Check your internet or Supabase settings.",
+  "error_supabase_config": "App is not connected to Supabase. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in Replit Secrets.",
   "insufficient_credits": "Insufficient bid credits",
   "invalid_phone": "Enter a valid Ethiopian mobile number (+2519... or +2517...)",
-  "account_exists": "An account already exists for this phone number."
+  "account_exists": "An account already exists for this phone number.",
+  "invalid_credentials": "Wrong phone number or password.",
+  "email_not_confirmed": "Email confirmation is still enabled in Supabase. Turn OFF Confirm email under Authentication → Providers → Email.",
+  "password_too_short": "Password must be at least 6 characters."
 }
