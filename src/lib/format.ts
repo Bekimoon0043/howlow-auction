@@ -30,12 +30,15 @@ export function formatCountdown(endTime: string | Date): string {
   const end = new Date(endTime).getTime()
   const now = Date.now()
   const diff = Math.max(0, end - now)
-  const h = Math.floor(diff / 3600000)
-  const m = Math.floor((diff % 3600000) / 60000)
-  const s = Math.floor((diff % 60000) / 1000)
-  if (h > 24) {
-    const d = Math.floor(h / 24)
-    return `${d}d ${h % 24}h`
+  
+  const d = Math.floor(diff / (1000 * 60 * 60 * 24))
+  const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+  const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+  const s = Math.floor((diff % (1000 * 60)) / 1000)
+
+  if (d > 0) {
+    return `${d}d ${h}h ${m}m`
   }
+  
   return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
 }
