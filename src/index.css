@@ -163,10 +163,10 @@
   .badge {
     @apply inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full;
   }
-  .badge-green { @apply badge bg-emerald-100 text-emerald-700 dark:bg-emerald-400/15 dark:text-emerald-400; }
-  .badge-red   { @apply badge bg-red-100 text-red-700 dark:bg-red-400/15 dark:text-red-400; }
-  .badge-teal  { @apply badge bg-brand-100 text-brand-700 dark:bg-brand-400/15 dark:text-brand-400; }
-  .badge-gray  { @apply badge bg-gray-100 text-gray-600 dark:bg-white/8 dark:text-gray-400; }
+  .badge-green { @apply inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-400/15 dark:text-emerald-400; }
+  .badge-red   { @apply inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full bg-red-100 text-red-700 dark:bg-red-400/15 dark:text-red-400; }
+  .badge-teal  { @apply inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full bg-brand-100 text-brand-700 dark:bg-brand-400/15 dark:text-brand-400; }
+  .badge-gray  { @apply inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full bg-gray-100 text-gray-600 dark:bg-white/8 dark:text-gray-400; }
 
   /* ── Countdown ── */
   .countdown {
@@ -180,7 +180,7 @@
 
   /* ── Stat card ── */
   .stat-card {
-    @apply card p-4 flex flex-col gap-1;
+    @apply bg-white dark:bg-gray-900/60 border border-gray-100 dark:border-white/8 rounded-2xl shadow-sm p-4 flex flex-col gap-1;
   }
   .stat-label { @apply text-xs font-medium text-muted-foreground uppercase tracking-wider; }
   .stat-value { @apply text-2xl font-bold tabular-nums; }
