@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
-import { Outlet, NavLink, useLocation, Link } from 'react-router-dom'
-import { LayoutDashboard, Package, Gavel, Users, Wallet, Settings, Menu, X, Bell } from 'lucide-react'
+import { Outlet, NavLink, useLocation, Link, useNavigate } from 'react-router-dom'
+import { LayoutDashboard, Package, Gavel, Users, Wallet, Settings, Menu, X, Bell, LogOut } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+import { useAuthStore } from '@/stores/authStore'
 
 const links = [
   { to: '/admin',           icon: LayoutDashboard, label: 'Dashboard' },
@@ -16,6 +17,8 @@ export default function AdminLayout() {
   const [pendingDeposits, setPendingDeposits] = useState(0)
   const [mobileOpen, setMobileOpen] = useState(false)
   const location = useLocation()
+  const navigate = useNavigate()
+  const signOut = useAuthStore(state => state.signOut)
 
   useEffect(() => {
     const load = async () => {
@@ -34,6 +37,11 @@ export default function AdminLayout() {
   }, [])
 
   useEffect(() => { setMobileOpen(false) }, [location.pathname])
+
+  const handleLogout = async () => {
+    await signOut()
+    navigate('/login')
+  }
 
   const NavItem = ({ to, icon: Icon, label, end }: { to: string; icon: any; label: string; end?: boolean }) => (
     <NavLink
@@ -70,8 +78,16 @@ export default function AdminLayout() {
         <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
           {links.map(l => <NavItem key={l.to} {...l} end={l.to === '/admin'} />)}
         </nav>
-        <div className="p-4 border-t border-white/8">
-          <Link to="/" className="text-xs text-gray-500 hover:text-gray-300 transition flex items-center gap-1.5">
+        
+        <div className="p-3 border-t border-white/8 space-y-1">
+          <button 
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all"
+          >
+            <LogOut size={17} />
+            <span>Logout</span>
+          </button>
+          <Link to="/" className="flex items-center gap-1.5 px-3 py-2 text-xs text-gray-500 hover:text-gray-300 transition">
             ← View user app
           </Link>
         </div>
@@ -99,6 +115,13 @@ export default function AdminLayout() {
       {mobileOpen && (
         <div className="md:hidden fixed top-14 inset-x-0 z-40 bg-gray-950 border-b border-white/8 p-3 space-y-1">
           {links.map(l => <NavItem key={l.to} {...l} end={l.to === '/admin'} />)}
+          <button 
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-3 py-2 text-sm font-medium text-red-400 hover:text-red-300 transition"
+          >
+            <LogOut size={17} />
+            <span>Logout</span>
+          </button>
           <Link to="/" className="block px-3 py-2 text-sm text-gray-500 hover:text-gray-300 transition">← User app</Link>
         </div>
       )}
