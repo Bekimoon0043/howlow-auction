@@ -1,0 +1,187 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-brand-50:  #f0fdfa;
+  --color-brand-100: #ccfbf1;
+  --color-brand-200: #99f6e4;
+  --color-brand-300: #5eead4;
+  --color-brand-400: #2dd4bf;
+  --color-brand-500: #14b8a6;
+  --color-brand-600: #0d9488;
+  --color-brand-700: #0f766e;
+  --color-brand-800: #115e59;
+  --color-brand-900: #134e4a;
+
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-card-border: hsl(var(--card-border));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --font-sans: var(--app-font-sans);
+  --font-mono: var(--app-font-mono);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 6px);
+}
+
+/* ── LIGHT ─────────────────────────────────────────────── */
+:root {
+  --background: 220 20% 97%;
+  --foreground: 222 47% 8%;
+  --border: 220 20% 88%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 8%;
+  --card-border: 220 20% 90%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 8%;
+  --primary: 174 84% 32%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 220 20% 93%;
+  --secondary-foreground: 222 47% 15%;
+  --muted: 220 20% 93%;
+  --muted-foreground: 220 10% 50%;
+  --accent: 174 50% 92%;
+  --accent-foreground: 174 84% 22%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --input: 220 20% 88%;
+  --ring: 174 84% 32%;
+
+  --app-font-sans: 'Inter', 'Noto Sans Ethiopic', system-ui, sans-serif;
+  --app-font-mono: 'JetBrains Mono', Menlo, monospace;
+  --radius: 0.75rem;
+}
+
+/* ── DARK ──────────────────────────────────────────────── */
+.dark {
+  --background: 224 40% 6%;
+  --foreground: 210 30% 94%;
+  --border: 220 25% 14%;
+  --card: 222 38% 9%;
+  --card-foreground: 210 30% 94%;
+  --card-border: 220 25% 15%;
+  --popover: 222 38% 9%;
+  --popover-foreground: 210 30% 94%;
+  --primary: 174 84% 42%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 220 25% 14%;
+  --secondary-foreground: 210 30% 90%;
+  --muted: 220 25% 14%;
+  --muted-foreground: 215 15% 55%;
+  --accent: 220 25% 16%;
+  --accent-foreground: 210 30% 90%;
+  --destructive: 0 72% 45%;
+  --destructive-foreground: 0 0% 100%;
+  --input: 220 25% 18%;
+  --ring: 174 84% 42%;
+}
+
+@layer base {
+  * { @apply border-border; }
+  html { -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; }
+  body { @apply font-sans antialiased bg-background text-foreground; }
+}
+
+@layer components {
+  /* ── Buttons ── */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2
+           bg-gradient-to-r from-brand-600 to-brand-500
+           hover:from-brand-700 hover:to-brand-600
+           active:scale-95
+           text-white font-semibold text-sm py-3 px-5 rounded-2xl
+           transition-all duration-150
+           shadow-lg shadow-brand-700/25
+           disabled:opacity-50 disabled:pointer-events-none;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2
+           bg-white/80 dark:bg-white/5
+           border border-gray-200 dark:border-white/10
+           hover:bg-gray-50 dark:hover:bg-white/10
+           active:scale-95
+           text-gray-800 dark:text-gray-200 font-medium text-sm py-3 px-5 rounded-2xl
+           transition-all duration-150
+           disabled:opacity-50 disabled:pointer-events-none;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2
+           hover:bg-gray-100 dark:hover:bg-white/8
+           active:scale-95
+           text-gray-700 dark:text-gray-300 font-medium text-sm py-2.5 px-4 rounded-xl
+           transition-all duration-150;
+  }
+
+  /* ── Cards ── */
+  .card {
+    @apply bg-white dark:bg-gray-900/60
+           border border-gray-100 dark:border-white/8
+           rounded-2xl shadow-sm;
+  }
+  .card-glass {
+    @apply bg-white/70 dark:bg-white/5
+           backdrop-blur-xl
+           border border-white/60 dark:border-white/10
+           rounded-2xl shadow-md;
+  }
+
+  /* ── Inputs ── */
+  .input-field {
+    @apply w-full rounded-2xl
+           border border-gray-200 dark:border-white/10
+           bg-gray-50 dark:bg-white/5
+           px-4 py-3.5 text-base
+           focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500
+           transition-all duration-150
+           text-gray-900 dark:text-gray-100
+           placeholder:text-gray-400 dark:placeholder:text-gray-500;
+  }
+
+  /* ── Status badges ── */
+  .badge {
+    @apply inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full;
+  }
+  .badge-green { @apply badge bg-emerald-100 text-emerald-700 dark:bg-emerald-400/15 dark:text-emerald-400; }
+  .badge-red   { @apply badge bg-red-100 text-red-700 dark:bg-red-400/15 dark:text-red-400; }
+  .badge-teal  { @apply badge bg-brand-100 text-brand-700 dark:bg-brand-400/15 dark:text-brand-400; }
+  .badge-gray  { @apply badge bg-gray-100 text-gray-600 dark:bg-white/8 dark:text-gray-400; }
+
+  /* ── Countdown ── */
+  .countdown {
+    @apply font-mono font-bold tabular-nums text-brand-600 dark:text-brand-400;
+  }
+
+  /* ── Section headings ── */
+  .section-title {
+    @apply text-lg font-bold tracking-tight text-gray-900 dark:text-white;
+  }
+
+  /* ── Stat card ── */
+  .stat-card {
+    @apply card p-4 flex flex-col gap-1;
+  }
+  .stat-label { @apply text-xs font-medium text-muted-foreground uppercase tracking-wider; }
+  .stat-value { @apply text-2xl font-bold tabular-nums; }
+}
