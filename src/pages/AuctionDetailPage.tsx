@@ -110,11 +110,7 @@ export default function AuctionDetailPage() {
           <h1 className="text-xl font-bold">{title}</h1>
           {desc && <p className="text-gray-500 text-sm">{desc}</p>}
 
-          <div className="grid grid-cols-2 gap-2 pt-2">
-            <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-3">
-              <p className="text-xs text-gray-500">{t('retail_price')}</p>
-              <p className="font-bold text-brand-700">{formatETB(p?.retail_price)}</p>
-            </div>
+          <div className="grid grid-cols-3 gap-2 pt-2">
             <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-3">
               <p className="text-xs text-gray-500">{t('bid_cost')} / bid</p>
               <p className="font-bold">{formatETB(auction.bid_cost)}</p>

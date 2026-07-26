@@ -27,6 +27,7 @@ import AdminRoute from '@/components/AdminRoute'
 export default function App() {
   const initialize = useAuthStore(s => s.initialize)
   const loading = useAuthStore(s => s.loading)
+  const isAdmin = useAuthStore(s => s.isAdmin)
   const initTheme = useThemeStore(s => s.init)
 
   useEffect(() => {
@@ -49,7 +50,7 @@ export default function App() {
 
       <Route element={<ProtectedRoute />}>
         <Route element={<AppLayout />}>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={isAdmin ? <Navigate to="/admin" replace /> : <HomePage />} />
           <Route path="/auctions" element={<AuctionsPage />} />
           <Route path="/auctions/:id" element={<AuctionDetailPage />} />
           <Route path="/wallet" element={<WalletPage />} />
@@ -72,7 +73,7 @@ export default function App() {
         </Route>
       </Route>
 
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route path="*" element={<Navigate to={isAdmin ? '/admin' : '/'} replace />} />
     </Routes>
   )
 }

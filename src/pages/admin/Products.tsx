@@ -14,7 +14,6 @@ export default function AdminProducts() {
     title_en: '',
     description_am: '',
     description_en: '',
-    retail_price: '',
     shipping_cost: '0'
   })
   const [files, setFiles] = useState<File[]>([])
@@ -116,8 +115,8 @@ export default function AdminProducts() {
   }
 
   const create = async () => {
-    if (!form.title_am || !form.title_en || !form.retail_price) {
-      setErrorDetail('Title (both Amharic & English) and retail price are required')
+    if (!form.title_am || !form.title_en) {
+      setErrorDetail('Title (both Amharic & English) is required')
       return
     }
     setStep('saving')
@@ -133,7 +132,6 @@ export default function AdminProducts() {
           title_en: form.title_en,
           description_am: form.description_am || null,
           description_en: form.description_en || null,
-          retail_price: parseFloat(form.retail_price),
           shipping_cost: parseFloat(form.shipping_cost || '0')
         })
         .select('id')
@@ -170,7 +168,7 @@ export default function AdminProducts() {
       }
 
       // Reset form
-      setForm({ title_am: '', title_en: '', description_am: '', description_en: '', retail_price: '', shipping_cost: '0' })
+      setForm({ title_am: '', title_en: '', description_am: '', description_en: '', shipping_cost: '0' })
       previews.forEach(u => URL.revokeObjectURL(u))
       setFiles([])
       setPreviews([])
@@ -208,8 +206,6 @@ export default function AdminProducts() {
           value={form.description_am} onChange={e => setForm({ ...form, description_am: e.target.value })} />
         <textarea className="input-field min-h-[70px]" placeholder="Description (English)"
           value={form.description_en} onChange={e => setForm({ ...form, description_en: e.target.value })} />
-        <input className="input-field" type="number" step="0.01" placeholder="Retail Price ETB *"
-          value={form.retail_price} onChange={e => setForm({ ...form, retail_price: e.target.value })} />
         <input className="input-field" type="number" step="0.01" placeholder="Shipping Cost ETB"
           value={form.shipping_cost} onChange={e => setForm({ ...form, shipping_cost: e.target.value })} />
 
@@ -315,7 +311,7 @@ export default function AdminProducts() {
                 <p className="font-medium truncate">{p.title_en}</p>
                 <p className="text-sm text-gray-500 truncate">{p.title_am}</p>
                 <p className="text-xs text-gray-400">
-                  {p.product_images?.length || 0} image(s) · {formatETB(p.retail_price)}
+                  {p.product_images?.length || 0} image(s)
                 </p>
               </div>
               <button className="btn-secondary text-sm text-red-600 shrink-0" onClick={() => deleteProduct(p.id)}>
