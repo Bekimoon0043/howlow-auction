@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import { useAuthStore } from '@/stores/authStore'
 import { formatETB } from '@/lib/format'
-import { MessageCircle, ArrowUpRight, ArrowDownLeft, Send } from 'lucide-react'
+import { MessageCircle, ArrowUpRight, ArrowDownLeft, Send, Copy, Check } from 'lucide-react'
 
 const TX_CREDIT = ['deposit', 'admin_credit', 'refund', 'referral_bonus']
 
@@ -22,6 +22,12 @@ export default function WalletPage() {
   const [note, setNote] = useState('')
   const [msg, setMsg] = useState('')
   const [msgOk, setMsgOk] = useState(true)
+  const [copied, setCopied] = useState<string | null>(null)
+
+  const PAYMENT_DETAILS = {
+    cbe: "1000475794978",
+    telebirr: "0979494843"
+  }
 
   useEffect(() => {
     if (!profile) return
@@ -37,6 +43,12 @@ export default function WalletPage() {
     })()
   }, [profile])
 
+  const copyToClipboard = (text: string, type: string) => {
+    navigator.clipboard.writeText(text)
+    setCopied(type)
+    setTimeout(() => setCopied(null), 2000)
+  }
+
   const submitDepositRequest = async () => {
     if (!profile || !amount) return
     const { error } = await supabase.from('deposit_requests').insert({
@@ -50,7 +62,6 @@ export default function WalletPage() {
 
   return (
     <div className="space-y-5 max-w-lg">
-      {/* Balance hero */}
       <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-800 via-brand-700 to-brand-600 p-5 shadow-lg shadow-brand-700/25">
         <div className="absolute -right-8 -top-8 w-40 h-40 rounded-full bg-white/10" />
         <div className="absolute -right-4 -top-4 w-28 h-28 rounded-full bg-white/8" />
@@ -58,10 +69,41 @@ export default function WalletPage() {
         <p className="text-white text-4xl font-black relative mt-1 tabular-nums">{formatETB(balance)}</p>
       </div>
 
-      {/* Add balance */}
       <div className="card p-5 space-y-4">
         <h2 className="font-bold text-base">{t('add_balance')}</h2>
-        <p className="text-sm text-muted-foreground leading-relaxed">{t('deposit_instructions')}</p>
+        
+        {/* Payment Details Section */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-white/5 rounded-xl border border-gray-100 dark:border-white/10">
+            <div>
+              <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">CBE Account</p>
+              <p className="font-mono font-bold text-sm">{PAYMENT_DETAILS.cbe}</p>
+            </div>
+            <button 
+              onClick={() => copyToClipboard(PAYMENT_DETAILS.cbe, 'cbe')}
+              className="p-2 hover:bg-white/10 rounded-lg transition-colors text-brand-500"
+            >
+              {copied === 'cbe' ? <Check size={16} /> : <Copy size={16} />}
+            </button>
+          </div>
+
+          <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-white/5 rounded-xl border border-gray-100 dark:border-white/10">
+            <div>
+              <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Telebirr Number</p>
+              <p className="font-mono font-bold text-sm">{PAYMENT_DETAILS.telebirr}</p>
+            </div>
+            <button 
+              onClick={() => copyToClipboard(PAYMENT_DETAILS.telebirr, 'telebirr')}
+              className="p-2 hover:bg-white/10 rounded-lg transition-colors text-brand-500"
+            >
+              {copied === 'telebirr' ? <Check size={16} /> : <Copy size={16} />}
+            </button>
+          </div>
+        </div>
+
+        <p className="text-xs text-muted-foreground leading-relaxed italic">
+          Transfer the money to one of the accounts above, then submit your request below.
+        </p>
 
         <a
           href={`https://t.me/${telegram}`}
@@ -74,10 +116,10 @@ export default function WalletPage() {
         </a>
 
         <div className="pt-1 border-t border-gray-100 dark:border-white/8 space-y-3">
-          <p className="text-sm font-semibold text-muted-foreground">Log deposit request (optional)</p>
+          <p className="text-sm font-semibold text-muted-foreground">Log deposit request</p>
           <input type="number" className="input-field" placeholder="Amount in ETB"
             value={amount} onChange={e => setAmount(e.target.value)} />
-          <input className="input-field" placeholder="Note (e.g. CBE receipt number)"
+          <input className="input-field" placeholder="Note (e.g. Transaction ID or Receipt #)"
             value={note} onChange={e => setNote(e.target.value)} />
           <button className="btn-secondary w-full" onClick={submitDepositRequest}
             disabled={!amount}>

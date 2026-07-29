@@ -37,18 +37,32 @@ export default function AdminWallet() {
   const [loadingRequests, setLoadingRequests] = useState(false)
   const [busyId, setBusyId] = useState<string | null>(null)
 
+  // FIX: Added descending sort and ensured requests are fetched correctly
   const loadRequests = useCallback(async () => {
     setLoadingRequests(true)
+    // We use a left join to ensure we see the request even if profile info is missing
     const { data, error } = await supabase
       .from('deposit_requests')
-      .select('*, profiles(display_name, phone_number)')
+      .select('*, profiles:user_id(display_name, phone_number)')
       .eq('status', 'pending')
-      .order('created_at', { ascending: true })
-    if (!error) setRequests(data || [])
+      .order('created_at', { ascending: false }) 
+    
+    if (error) {
+      console.error('Error loading requests:', error)
+      setMsg(error.message)
+      setMsgOk(false)
+    } else {
+      setRequests(data || [])
+    }
     setLoadingRequests(false)
   }, [])
 
-  useEffect(() => { loadRequests() }, [loadRequests])
+  // Auto-load on mount and refresh every 30 seconds
+  useEffect(() => { 
+    loadRequests() 
+    const interval = setInterval(loadRequests, 30000)
+    return () => clearInterval(interval)
+  }, [loadRequests])
 
   const find = async () => {
     setMsg('')
