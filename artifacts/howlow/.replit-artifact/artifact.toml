@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "HowLow Auction"
+version = "1.0.0"
+id = "artifacts/howlow"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 24007
+
+[services.development]
+run = "pnpm --filter @workspace/howlow run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/howlow", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/howlow/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "24007"
+BASE_PATH = "/"
